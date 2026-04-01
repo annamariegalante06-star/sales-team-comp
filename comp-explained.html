@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How You Get Paid — Relay Comp Model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: #0F0A1A; color: #FFFFFF; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { font-family: 'Unbounded', sans-serif; font-weight: 700; }
+  section { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 80px 24px; }
+  .container { max-width: 900px; width: 100%; margin: 0 auto; }
+  .secondary { color: #A89BC2; }
+  .green { color: #10B981; }
+  .red { color: #EF4444; }
+
+  /* --- HERO --- */
+  #hero { text-align: center; flex-direction: column; }
+  #hero h1 { font-size: clamp(2.4rem, 6vw, 4rem); margin-bottom: 24px; position: relative; display: inline-block; }
+  #hero h1::after { content: ''; position: absolute; inset: -30px -60px; background: radial-gradient(ellipse, rgba(124,58,237,0.25) 0%, transparent 70%); z-index: -1; border-radius: 50%; }
+  #hero .subtitle { font-size: 1.25rem; color: #A89BC2; max-width: 480px; margin: 0 auto; }
+  #hero .subtitle strong { color: #FFFFFF; }
+  /* --- CARDS --- */
+  .card { background: #1A1128; border: 1px solid #2D1F4E; border-radius: 16px; padding: 28px; }
+  .pill { display: inline-block; padding: 4px 14px; border-radius: 999px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+  .pill-green { background: rgba(16,185,129,0.15); color: #10B981; }
+  .pill-red { background: rgba(239,68,68,0.15); color: #EF4444; }
+  /* --- SECTION HEADERS --- */
+  .section-header { font-size: clamp(1.6rem, 4vw, 2.2rem); margin-bottom: 48px; text-align: center; }
+  /* --- PROBLEM --- */
+  #problem .demo-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+  #problem .demo-card { text-align: center; padding: 24px 12px; }
+  #problem .demo-card .name { font-weight: 700; font-size: 1rem; margin-bottom: 8px; }
+  #problem .demo-card.muted { opacity: 0.5; }
+  #problem .demo-card.muted .name { text-decoration: line-through; }
+  #problem .demo-card .amount { font-family: 'Unbounded', sans-serif; font-size: 1.3rem; margin-top: 12px; color: #A89BC2; }
+  #problem .narrative { text-align: center; font-size: 1.05rem; color: #A89BC2; margin-bottom: 24px; }
+  #problem .narrative strong { color: #FFFFFF; }
+  #problem .callout { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); border-radius: 16px; padding: 24px 32px; text-align: center; font-size: 1.1rem; }
+  #problem .callout strong { color: #EF4444; }
+  /* --- NEW MODEL --- */
+  #new-model .tier { display: flex; align-items: center; gap: 24px; border-radius: 16px; padding: 24px 28px; margin-bottom: 16px; }
+  #new-model .tier-price { font-family: 'Unbounded', sans-serif; font-size: 1.4rem; white-space: nowrap; min-width: 140px; }
+  #new-model .tier-desc { font-size: 1rem; color: #A89BC2; }
+  #new-model .tier-1 { background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.25); }
+  #new-model .tier-2 { background: rgba(16,185,129,0.10); border: 1px solid rgba(16,185,129,0.25); }
+  #new-model .tier-3 { background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.18); }
+  #new-model .compare-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px; }
+  #new-model .compare-card { padding: 24px; text-align: center; }
+  #new-model .compare-card .big { font-family: 'Unbounded', sans-serif; font-size: 2rem; margin: 8px 0; }
+  #new-model .compare-card .sub { font-size: 0.85rem; color: #A89BC2; }
+  .border-red { border-top: 3px solid #EF4444; }
+  .border-green { border-top: 3px solid #10B981; }
+  /* --- REAL NUMBERS --- */
+  #real-numbers .side-by-side { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
+  #real-numbers .breakdown { padding: 28px; }
+  #real-numbers .breakdown h3 { font-size: 1rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'DM Sans', sans-serif; font-weight: 700; }
+  #real-numbers .line-item { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.95rem; color: #A89BC2; }
+  #real-numbers .line-item span:last-child { color: #FFFFFF; font-weight: 500; }
+  #real-numbers .total-line { display: flex; justify-content: space-between; padding: 12px 0 0; margin-top: 8px; border-top: 1px solid #2D1F4E; font-family: 'Unbounded', sans-serif; font-size: 1.3rem; }
+  #real-numbers .summary { text-align: center; font-size: 1.05rem; color: #A89BC2; margin-bottom: 12px; }
+  #real-numbers .summary strong { color: #FFFFFF; }
+  #real-numbers .note { text-align: center; font-size: 0.85rem; color: #A89BC2; opacity: 0.7; }
+  #upside .slider-wrap { max-width: 600px; margin: 0 auto 40px; text-align: center; }
+  #upside .slider-label { font-size: 1rem; color: #A89BC2; margin-bottom: 8px; }
+  #upside .slider-value { font-family: 'Unbounded', sans-serif; font-size: 2rem; margin-bottom: 16px; color: #7C3AED; }
+  #upside input[type="range"] { -webkit-appearance: none; width: 100%; height: 8px; border-radius: 4px; background: #2D1F4E; outline: none; }
+  #upside input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; border-radius: 50%; background: #7C3AED; cursor: pointer; border: 3px solid #FFFFFF; }
+  #upside .results { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
+  #upside .result-card { padding: 28px; }
+  #upside .result-card h3 { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'DM Sans', sans-serif; font-weight: 700; margin-bottom: 16px; }
+  #upside .result-line { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.9rem; color: #A89BC2; }
+  #upside .result-line span:last-child { color: #FFFFFF; font-weight: 500; }
+  #upside .result-total { display: flex; justify-content: space-between; padding: 12px 0 0; margin-top: 8px; border-top: 1px solid #2D1F4E; font-family: 'Unbounded', sans-serif; font-size: 1.2rem; }
+  #upside .comparison { text-align: center; font-size: 1.15rem; font-weight: 700; margin-bottom: 32px; min-height: 28px; }
+  #upside .breakeven-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  #upside .breakeven-card { text-align: center; padding: 20px; background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.2); }
+  #upside .breakeven-card .big { font-family: 'Unbounded', sans-serif; font-size: 1.5rem; color: #7C3AED; }
+  #upside .breakeven-card .sub { font-size: 0.85rem; color: #A89BC2; margin-top: 4px; }
+  /* --- BOTTOM LINE --- */
+  #bottom-line .final-card { text-align: center; padding: 48px 32px; margin-bottom: 40px; font-size: 1.3rem; line-height: 2.2; }
+  #bottom-line .final-card strong { display: block; }
+  #bottom-line .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  #bottom-line .metric { text-align: center; padding: 28px 16px; }
+  #bottom-line .metric .big { font-family: 'Unbounded', sans-serif; font-size: 1.6rem; color: #10B981; margin-bottom: 4px; }
+  #bottom-line .metric .label { font-size: 0.85rem; color: #A89BC2; }
+  /* --- RESPONSIVE --- */
+  @media (max-width: 640px) {
+    section { padding: 60px 16px; }
+    #problem .demo-row { grid-template-columns: repeat(2, 1fr); }
+    #new-model .tier { flex-direction: column; align-items: flex-start; gap: 8px; }
+    #new-model .compare-row,
+    #real-numbers .side-by-side,
+    #upside .results,
+    #upside .breakeven-row { grid-template-columns: 1fr; }
+    #bottom-line .metrics { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SECTION 1: HERO -->
+<section id="hero">
+  <div class="container" style="display:flex;flex-direction:column;align-items:center;">
+    <h1>How You Get Paid</h1>
+    <p class="subtitle">A new comp model that rewards quality.<br><strong>Better leads = more money for you.</strong></p>
+  </div>
+</section>
+
+<!-- SECTION 2: THE PROBLEM -->
+<section id="problem">
+  <div class="container">
+    <h2 class="section-header">Right now, every demo pays the same</h2>
+    <div class="demo-row">
+      <div class="card demo-card">
+        <div class="name">Tocayo</div>
+        <span class="pill pill-green">Won</span>
+        <div class="amount">$25</div>
+      </div>
+      <div class="card demo-card">
+        <div class="name">Sobremesa</div>
+        <span class="pill pill-red">Lost</span>
+        <div class="amount">$25</div>
+      </div>
+      <div class="card demo-card muted">
+        <div class="name">Gloss Genius</div>
+        <span class="pill pill-red">Spiked</span>
+        <div class="amount">$25</div>
+      </div>
+      <div class="card demo-card muted">
+        <div class="name">Dynamic Coffee</div>
+        <span class="pill pill-red">Spiked</span>
+        <div class="amount">$25</div>
+      </div>
+    </div>
+    <p class="narrative">Andy booked 4 demos in February. <strong>3 out of 4 went nowhere.</strong><br>But all 4 paid the same $25.</p>
+    <div class="callout">
+      <strong>$75 paid for leads that never converted.</strong><br>
+      That's 75% of Andy's variable comp going to waste.
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: THE NEW MODEL -->
+<section id="new-model">
+  <div class="container">
+    <h2 class="section-header">Pay for outcomes, not activity</h2>
+    <div class="tier tier-1">
+      <div class="tier-price">$5 / lead</div>
+      <div class="tier-desc">Paid on every lead you bring. Small base &mdash; covers your hustle.</div>
+    </div>
+    <div class="tier tier-2">
+      <div class="tier-price green">$80 / conversion</div>
+      <div class="tier-desc">Paid when your lead becomes a paying customer. This is the big one.</div>
+    </div>
+    <div class="tier tier-3">
+      <div class="tier-price green">$40 / retention</div>
+      <div class="tier-desc">Paid if your customer stays past month 2. Rewards quality fits.</div>
+    </div>
+    <div class="compare-row">
+      <div class="card compare-card border-red">
+        <div class="sub">Bad lead costs</div>
+        <div class="big red">$5</div>
+        <div class="sub">vs $25 under old model</div>
+      </div>
+      <div class="card compare-card border-green">
+        <div class="sub">Great lead earns you</div>
+        <div class="big green">$125</div>
+        <div class="sub">vs $75 under old model &mdash; 67% more</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4: REAL NUMBERS -->
+<section id="real-numbers">
+  <div class="container">
+    <h2 class="section-header">What Andy would earn</h2>
+    <div class="side-by-side">
+      <div class="card breakdown border-red">
+        <h3 class="red">Old Model</h3>
+        <div class="line-item"><span>Base salary</span><span>$275</span></div>
+        <div class="line-item"><span>4 demos &times; $25</span><span>$100</span></div>
+        <div class="line-item"><span>1 win &times; $50</span><span>$50</span></div>
+        <div class="total-line"><span>Total</span><span>$425</span></div>
+      </div>
+      <div class="card breakdown border-green">
+        <h3 class="green">New Model</h3>
+        <div class="line-item"><span>Base salary</span><span>$275</span></div>
+        <div class="line-item"><span>4 leads &times; $5</span><span>$20</span></div>
+        <div class="line-item"><span>1 conversion &times; $80</span><span>$80</span></div>
+        <div class="line-item"><span>1 retention &times; $40</span><span>$40</span></div>
+        <div class="total-line"><span>Total</span><span>$415</span></div>
+      </div>
+    </div>
+    <p class="summary">At 25% conversion, Andy earns almost the same &mdash; just <strong>$10 less</strong>. No one loses on day one.</p>
+    <p class="note">But 3 of Andy's leads were low quality. The old model didn't care. The new model does.</p>
+  </div>
+</section>
+
+<!-- SECTION 5: THE UPSIDE -->
+<section id="upside">
+  <div class="container">
+    <h2 class="section-header">What if Andy brings better leads?</h2>
+    <div class="slider-wrap">
+      <div class="slider-label">Andy's conversion rate</div>
+      <div class="slider-value" id="sliderDisplay">50%</div>
+      <input type="range" id="convSlider" min="10" max="80" value="50" step="1">
+    </div>
+    <div class="results">
+      <div class="card result-card border-red">
+        <h3 class="red">Old Model</h3>
+        <div class="result-line"><span>Base</span><span>$275</span></div>
+        <div class="result-line"><span>4 demos &times; $25</span><span>$100</span></div>
+        <div class="result-line" id="oldWinsLine"><span>2 wins &times; $50</span><span>$100</span></div>
+        <div class="result-total"><span>Total</span><span id="oldTotal">$475</span></div>
+      </div>
+      <div class="card result-card border-green">
+        <h3 class="green">New Model</h3>
+        <div class="result-line"><span>Base</span><span>$275</span></div>
+        <div class="result-line"><span>4 leads &times; $5</span><span>$20</span></div>
+        <div class="result-line" id="newConvLine"><span>2 conversions &times; $80</span><span>$160</span></div>
+        <div class="result-line" id="newRetLine"><span>1.6 retentions &times; $40</span><span>$64</span></div>
+        <div class="result-total"><span>Total</span><span id="newTotal">$519</span></div>
+      </div>
+    </div>
+    <div class="comparison" id="comparisonText"></div>
+    <div class="breakeven-row">
+      <div class="card breakeven-card">
+        <div class="big">~33%</div>
+        <div class="sub">Break-even conversion rate</div>
+      </div>
+      <div class="card breakeven-card">
+        <div class="sub" style="margin-bottom:4px;">Every point above 33%</div>
+        <div class="big" style="font-size:1.1rem;">is extra money in your pocket</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6: THE BOTTOM LINE -->
+<section id="bottom-line">
+  <div class="container">
+    <div class="card final-card">
+      <strong>Same performance = same pay.</strong>
+      <strong>Better leads = more money.</strong>
+      <strong>Bad leads stop costing us both.</strong>
+    </div>
+    <div class="metrics">
+      <div class="card metric">
+        <div class="big">~33%</div>
+        <div class="label">Break-even &mdash; your current average</div>
+      </div>
+      <div class="card metric">
+        <div class="big">$125</div>
+        <div class="label">Max per lead &mdash; vs $75 before</div>
+      </div>
+      <div class="card metric">
+        <div class="big">80%</div>
+        <div class="label">Waste reduction &mdash; $5 vs $25 on bad leads</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  var slider = document.getElementById('convSlider');
+  var display = document.getElementById('sliderDisplay');
+  var oldWinsLine = document.getElementById('oldWinsLine');
+  var oldTotal = document.getElementById('oldTotal');
+  var newConvLine = document.getElementById('newConvLine');
+  var newRetLine = document.getElementById('newRetLine');
+  var newTotal = document.getElementById('newTotal');
+  var compText = document.getElementById('comparisonText');
+
+  function fmt(n) { return '$' + Math.round(n); }
+
+  function update() {
+    var rate = parseInt(slider.value) / 100;
+    display.textContent = slider.value + '%';
+
+    var wins = rate * 4;
+    var retentions = wins * 0.8;
+
+    var oldEarn = 275 + 100 + wins * 50;
+    var newEarn = 275 + 20 + wins * 80 + retentions * 40;
+
+    oldWinsLine.innerHTML = '<span>' + wins.toFixed(1).replace(/\.0$/, '') + ' wins &times; $50</span><span>' + fmt(wins * 50) + '</span>';
+    oldTotal.textContent = fmt(oldEarn);
+
+    newConvLine.innerHTML = '<span>' + wins.toFixed(1).replace(/\.0$/, '') + ' conversions &times; $80</span><span>' + fmt(wins * 80) + '</span>';
+    newRetLine.innerHTML = '<span>' + retentions.toFixed(1).replace(/\.0$/, '') + ' retentions &times; $40</span><span>' + fmt(retentions * 40) + '</span>';
+    newTotal.textContent = fmt(newEarn);
+
+    var diff = Math.round(newEarn - oldEarn);
+    if (diff > 10) {
+      compText.innerHTML = 'Andy earns <strong style="color:#10B981">$' + diff + ' more</strong> under the new model';
+    } else if (diff < -10) {
+      compText.innerHTML = 'Andy earns <strong style="color:#EF4444">$' + Math.abs(diff) + ' less</strong> under the new model';
+    } else {
+      compText.innerHTML = '<span style="color:#FFFFFF">Andy earns about the same</span>';
+    }
+  }
+
+  slider.addEventListener('input', update);
+  update();
+})();
+</script>
+</body>
+</html>
