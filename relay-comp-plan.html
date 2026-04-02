@@ -184,9 +184,22 @@
     .quality-card .q-grid { grid-template-columns: 1fr; }
     .earn-sliders { flex-direction: column; gap: 16px; }
   }
+  /* Tab Nav */
+  .tab-nav { position: sticky; top: 0; z-index: 100; background: #0F0A1Aee; backdrop-filter: blur(12px); border-bottom: 1px solid #2D1F4E; padding: 12px 24px; display: flex; justify-content: center; gap: 8px; }
+  .tab-nav a { font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600; text-decoration: none; padding: 8px 20px; border-radius: 999px; transition: all 0.2s; }
+  .tab-nav a.active { background: #7C3AED; color: #fff; }
+  .tab-nav a:not(.active) { background: transparent; color: #A89BC2; border: 1px solid #2D1F4E; }
+  .tab-nav a:not(.active):hover { border-color: #7C3AED; color: #fff; }
 </style>
 </head>
 <body>
+
+<nav class="tab-nav">
+  <a href="comp-explained.html">Team View</a>
+  <a href="admin-view.html">Nick's View</a>
+  <a href="relay-comp-plan.html" class="active">Calculator</a>
+</nav>
+
 <div class="container">
 
   <!-- Header -->

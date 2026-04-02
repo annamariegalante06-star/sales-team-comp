@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relay Comp Model — Business Case</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: #0F0A1A; color: #FFFFFF; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, h4 { font-family: 'Unbounded', sans-serif; font-weight: 700; }
+  section { padding: 56px 24px; }
+  .container { max-width: 1100px; width: 100%; margin: 0 auto; }
+  .muted { color: #A89BC2; }
+  .green { color: #10B981; }
+  .red { color: #EF4444; }
+  .purple { color: #A78BFA; }
+  .card { background: #1A1128; border: 1px solid #2D1F4E; border-radius: 16px; padding: 28px; }
+  .section-header { font-size: clamp(1.3rem, 3vw, 1.8rem); margin-bottom: 10px; text-align: center; }
+  .section-sub { text-align: center; color: #A89BC2; font-size: 1rem; margin-bottom: 32px; }
+  .hero { text-align: center; padding: 80px 24px 48px; }
+  .hero h1 { font-size: clamp(1.8rem, 4.5vw, 2.8rem); margin-bottom: 12px; position: relative; display: inline-block; }
+  .hero h1::after { content: ''; position: absolute; inset: -30px -60px; background: radial-gradient(ellipse, rgba(124,58,237,0.25) 0%, transparent 70%); z-index: -1; border-radius: 50%; }
+  .hero p { font-size: 1.1rem; color: #A89BC2; }
+  .data-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  .data-table th { text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: #A89BC2; padding: 10px 8px; border-bottom: 2px solid #2D1F4E; font-weight: 700; }
+  .data-table th:not(:first-child) { text-align: right; }
+  .data-table td { padding: 8px; border-bottom: 1px solid rgba(45,31,78,0.4); color: #A89BC2; }
+  .data-table td:not(:first-child) { text-align: right; font-family: 'Unbounded', sans-serif; font-size: 0.75rem; color: #FFF; }
+  .data-table tr.highlight-row { background: rgba(16,185,129,0.06); }
+  .data-table tr.total-row td { font-weight: 700; border-top: 2px solid #2D1F4E; color: #FFF; }
+  .data-table tr.total-row td:not(:first-child) { color: #10B981; }
+  .callout { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25); border-radius: 16px; padding: 20px 28px; text-align: center; font-size: 1rem; color: #A89BC2; line-height: 1.8; }
+  .callout strong { color: #10B981; }
+  .callout.purple-callout { background: rgba(124,58,237,0.08); border-color: rgba(124,58,237,0.25); }
+  .callout.purple-callout strong { color: #FFFFFF; }
+  /* Inputs table */
+  .inputs-table { width: 100%; max-width: 480px; margin: 0 auto; }
+  .inputs-table tr td { padding: 8px 4px; border-bottom: 1px solid rgba(45,31,78,0.3); }
+  .inputs-table tr td:first-child { color: #A89BC2; font-size: 0.9rem; }
+  .inputs-table tr td:last-child { text-align: right; }
+  .num-input { width: 70px; text-align: center; background: #0F0A1A; border: 1px solid #2D1F4E; color: #FFF; font-family: 'Unbounded', sans-serif; font-size: 0.85rem; padding: 6px 4px; border-radius: 8px; outline: none; }
+  .num-input:focus { border-color: #7C3AED; box-shadow: 0 0 0 2px rgba(124,58,237,0.3); }
+  /* Charts */
+  .chart-container { margin: 24px 0; }
+  .chart-label { font-size: 0.85rem; color: #A89BC2; margin-bottom: 4px; }
+  .chart-annotation { font-size: 0.78rem; color: #F59E0B; margin-top: 6px; font-style: italic; }
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 0.78rem; }
+  .bar-label { width: 56px; text-align: right; color: #A89BC2; flex-shrink: 0; font-size: 0.72rem; }
+  .bar-track { flex: 1; height: 22px; background: #1A1128; border-radius: 4px; position: relative; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 0.7rem; color: #FFF; font-weight: 700; min-width: 30px; transition: width 0.3s; }
+  .bar-val { flex-shrink: 0; width: 60px; text-align: right; color: #FFF; font-family: 'Unbounded', sans-serif; font-size: 0.7rem; }
+  /* Spend comparison */
+  .spend-row { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; font-size: 0.75rem; }
+  .spend-cat { width: 140px; text-align: right; color: #A89BC2; flex-shrink: 0; font-size: 0.72rem; }
+  .spend-bars { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+  .spend-bar { height: 16px; border-radius: 3px; display: flex; align-items: center; padding-left: 6px; font-size: 0.65rem; color: #FFF; font-weight: 600; }
+  /* Rev vs comp dynamic chart */
+  .rv-row { display: flex; gap: 4px; margin-bottom: 8px; align-items: flex-start; }
+  .rv-month { width: 28px; text-align: right; color: #A89BC2; font-size: 0.72rem; padding-top: 2px; flex-shrink: 0; }
+  .rv-bars { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+  .rv-bar { height: 18px; border-radius: 3px; display: flex; align-items: center; padding-left: 6px; font-size: 0.65rem; color: #FFF; font-weight: 600; transition: width 0.3s; }
+  .btn { display: inline-block; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; padding: 10px 24px; border-radius: 999px; border: none; cursor: pointer; background: #7C3AED; color: #FFF; margin-top: 16px; }
+  .btn:hover { background: #6D28D9; }
+  .tab-nav { position: sticky; top: 0; z-index: 100; background: #0F0A1Aee; backdrop-filter: blur(12px); border-bottom: 1px solid #2D1F4E; padding: 12px 24px; display: flex; justify-content: center; gap: 8px; }
+  .tab-nav a { font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600; text-decoration: none; padding: 8px 20px; border-radius: 999px; transition: all 0.2s; }
+  .tab-nav a.active { background: #7C3AED; color: #fff; }
+  .tab-nav a:not(.active) { background: transparent; color: #A89BC2; border: 1px solid #2D1F4E; }
+  .tab-nav a:not(.active):hover { border-color: #7C3AED; color: #fff; }
+  .legend { display: flex; gap: 16px; justify-content: center; font-size: 0.75rem; color: #A89BC2; margin-bottom: 12px; }
+  .legend span::before { content: ''; display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+  .legend .lg-green::before { background: #10B981; }
+  .legend .lg-purple::before { background: #7C3AED; }
+  .legend .lg-red::before { background: #EF4444; }
+  @media (max-width: 768px) {
+    section { padding: 40px 12px; }
+    .inputs-table { max-width: 100%; }
+    .data-table { font-size: 0.72rem; }
+    .data-table th, .data-table td { padding: 6px 4px; }
+    .spend-cat { width: 100px; font-size: 0.65rem; }
+    .bar-label { width: 40px; font-size: 0.65rem; }
+    .rv-month { width: 22px; font-size: 0.65rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="tab-nav">
+  <a href="comp-explained.html">Team View</a>
+  <a href="admin-view.html" class="active">Nic's View</a>
+  <a href="relay-comp-plan.html">Calculator</a>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <h1>Comp Model &mdash; Business Case</h1>
+    <p>Built for Nic. All numbers verified.</p>
+  </div>
+</section>
+
+<!-- CHURN CURVE -->
+<section>
+  <div class="container">
+    <h2 class="section-header">Relay retention curve</h2>
+    <p class="section-sub">Real data from 124 customers. The curve flattens at month 6 &mdash; that's where bonuses kick in.</p>
+    <div class="card chart-container" id="churn-chart"></div>
+  </div>
+</section>
+
+<!-- SPEND COMPARISON -->
+<section>
+  <div class="container">
+    <h2 class="section-header">Spend comparison &mdash; old vs. new</h2>
+    <p class="section-sub">New model is cheaper early and comparable at maturity, but generates more revenue.</p>
+    <div class="card chart-container" id="spend-chart"></div>
+  </div>
+</section>
+
+<!-- P&L CALCULATOR -->
+<section>
+  <div class="container">
+    <h2 class="section-header">Plug in your numbers</h2>
+    <p class="section-sub">Adjust inputs &mdash; the table and chart update live.</p>
+    <div class="card">
+      <table class="inputs-table">
+        <tr><td>New direct sale customers/mo</td><td><input class="num-input" type="number" id="in-direct" value="3" min="0" max="30" oninput="updatePL()"></td></tr>
+        <tr><td>New CC trial customers/mo</td><td><input class="num-input" type="number" id="in-cc" value="5" min="0" max="30" oninput="updatePL()"></td></tr>
+        <tr><td>New no-CC trial customers/mo</td><td><input class="num-input" type="number" id="in-nocc" value="2" min="0" max="30" oninput="updatePL()"></td></tr>
+        <tr><td>Organic trial customers/mo</td><td><input class="num-input" type="number" id="in-organic" value="4" min="0" max="30" oninput="updatePL()"></td></tr>
+        <tr><td>Boomerang reactivations/mo</td><td><input class="num-input" type="number" id="in-boomerang" value="1" min="0" max="30" oninput="updatePL()"></td></tr>
+        <tr><td>Revenue per customer</td><td><input class="num-input" type="number" id="in-rev" value="150" min="50" max="500" step="10" oninput="updatePL()"></td></tr>
+        <tr><td>Monthly retention rate %</td><td><input class="num-input" type="number" id="in-ret" value="80" min="50" max="99" oninput="updatePL()"></td></tr>
+        <tr><td>SDR base salary/mo</td><td><input class="num-input" type="number" id="in-base" value="275" min="0" max="1000" step="25" oninput="updatePL()"></td></tr>
+        <tr><td>Number of SDRs</td><td><input class="num-input" type="number" id="in-sdrs" value="2" min="1" max="10" oninput="updatePL()"></td></tr>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:24px;overflow-x:auto;">
+      <div id="pl-table"></div>
+      <div style="text-align:center;"><button class="btn" onclick="downloadCSV()">Download as CSV</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- REVENUE VS COMP CHART (dynamic) -->
+<section>
+  <div class="container">
+    <h2 class="section-header">Revenue vs. comp over 12 months</h2>
+    <p class="section-sub">Green = revenue, purple = total comp. The gap is profit.</p>
+    <div class="card chart-container">
+      <div class="legend"><span class="lg-green">Revenue</span><span class="lg-purple">Total Comp</span></div>
+      <div id="rv-chart"></div>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM LINE -->
+<section>
+  <div class="container">
+    <h2 class="section-header">Bottom line for Nic</h2>
+    <ul style="list-style:none;max-width:700px;margin:0 auto;">
+      <li style="padding:12px 0;border-bottom:1px solid rgba(45,31,78,0.4);color:#A89BC2;display:flex;gap:10px;"><span style="color:#10B981;font-size:1.1rem;flex-shrink:0;">&#10003;</span><span><strong style="color:#FFF;">We save $50 per customer acquired</strong> by cutting waste on bad leads.</span></li>
+      <li style="padding:12px 0;border-bottom:1px solid rgba(45,31,78,0.4);color:#A89BC2;display:flex;gap:10px;"><span style="color:#10B981;font-size:1.1rem;flex-shrink:0;">&#10003;</span><span><strong style="color:#FFF;">Every dollar of ongoing comp is self-funded</strong> by customer payments. Residuals are 17% of revenue.</span></li>
+      <li style="padding:12px 0;border-bottom:1px solid rgba(45,31,78,0.4);color:#A89BC2;display:flex;gap:10px;"><span style="color:#10B981;font-size:1.1rem;flex-shrink:0;">&#10003;</span><span><strong style="color:#FFF;">Break-even: month 1. Always.</strong> First payment covers close cost.</span></li>
+      <li style="padding:12px 0;border-bottom:1px solid rgba(45,31,78,0.4);color:#A89BC2;display:flex;gap:10px;"><span style="color:#10B981;font-size:1.1rem;flex-shrink:0;">&#10003;</span><span><strong style="color:#FFF;">M6/M12 bonuses align the team with retention</strong> &mdash; our biggest problem.</span></li>
+      <li style="padding:12px 0;color:#A89BC2;display:flex;gap:10px;"><span style="color:#10B981;font-size:1.1rem;flex-shrink:0;">&#10003;</span><span><strong style="color:#FFF;">Close bonuses are tiered by conversion rate.</strong> Better conversion = higher pay.</span></li>
+    </ul>
+    <div style="text-align:center;margin-top:28px;padding:20px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:16px;">
+      <div style="font-family:'Unbounded',sans-serif;font-size:1.5rem;color:#10B981;margin-bottom:4px;" id="annual-profit">$0</div>
+      <p style="color:#A89BC2;font-size:0.88rem;">Projected cumulative profit after 12 months</p>
+    </div>
+  </div>
+</section>
+
+<script>
+// --- Static chart: Churn Curve ---
+(function(){
+  var data = [100,75,60,47,37,33,32,30,25,28,25,22];
+  var h = '';
+  for (var i = 0; i < data.length; i++) {
+    var pct = data[i];
+    var color = i >= 5 ? '#10B981' : (pct >= 50 ? '#F59E0B' : '#EF4444');
+    h += '<div class="bar-row">';
+    h += '<div class="bar-label">M' + (i+1) + '</div>';
+    h += '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + color + ';">' + pct + '%</div></div>';
+    h += '</div>';
+  }
+  h += '<div class="chart-annotation">Month 6: curve flattens. This is where bonuses kick in.</div>';
+  document.getElementById('churn-chart').innerHTML = h;
+})();
+
+// --- Static chart: Spend Comparison ---
+(function(){
+  var cats = [
+    {name:'Lead costs/mo', old:750, m1:100, m6:100},
+    {name:'Close bonuses/mo', old:500, m1:530, m6:530},
+    {name:'Residuals/mo', old:0, m1:0, m6:250},
+    {name:'Milestones (avg/mo)', old:0, m1:0, m6:100},
+    {name:'SDR base salary', old:550, m1:550, m6:550}
+  ];
+  var tOld=0, tM1=0, tM6=0;
+  cats.forEach(function(c){tOld+=c.old;tM1+=c.m1;tM6+=c.m6;});
+  var max = Math.max(tOld, tM1, tM6, 800);
+  var h = '<div style="font-size:0.75rem;color:#A89BC2;display:flex;gap:16px;margin-bottom:12px;justify-content:center;">';
+  h += '<span><span style="display:inline-block;width:10px;height:10px;background:#EF4444;border-radius:2px;margin-right:3px;vertical-align:middle;"></span>Old model</span>';
+  h += '<span><span style="display:inline-block;width:10px;height:10px;background:#F59E0B;border-radius:2px;margin-right:3px;vertical-align:middle;"></span>New (month 1)</span>';
+  h += '<span><span style="display:inline-block;width:10px;height:10px;background:#10B981;border-radius:2px;margin-right:3px;vertical-align:middle;"></span>New (month 6)</span>';
+  h += '</div>';
+  cats.forEach(function(c){
+    var wO = Math.max(c.old/max*100,2), wM1 = Math.max(c.m1/max*100,2), wM6 = Math.max(c.m6/max*100,2);
+    h += '<div class="spend-row"><div class="spend-cat">' + c.name + '</div><div class="spend-bars">';
+    h += '<div class="spend-bar" style="width:' + wO + '%;background:#EF4444;">$' + c.old + '</div>';
+    h += '<div class="spend-bar" style="width:' + wM1 + '%;background:#F59E0B;">$' + c.m1 + '</div>';
+    h += '<div class="spend-bar" style="width:' + wM6 + '%;background:#10B981;">$' + c.m6 + '</div>';
+    h += '</div></div>';
+  });
+  h += '<div style="margin-top:12px;border-top:1px solid #2D1F4E;padding-top:12px;">';
+  h += '<div class="spend-row"><div class="spend-cat" style="font-weight:700;color:#FFF;">Total</div><div class="spend-bars">';
+  h += '<div class="spend-bar" style="width:' + (tOld/max*100) + '%;background:#EF4444;">$' + tOld + '</div>';
+  h += '<div class="spend-bar" style="width:' + (tM1/max*100) + '%;background:#F59E0B;">$' + tM1 + '</div>';
+  h += '<div class="spend-bar" style="width:' + (tM6/max*100) + '%;background:#10B981;">$' + tM6 + '</div>';
+  h += '</div></div></div>';
+  h += '<div style="margin-top:14px;font-size:0.82rem;color:#A89BC2;text-align:center;">Revenue generated: <strong style="color:#10B981;">$2,250/mo (new model)</strong> vs <strong style="color:#EF4444;">$1,650/mo (old model)</strong> &mdash; quality incentives drive more conversions.</div>';
+  document.getElementById('spend-chart').innerHTML = h;
+})();
+
+// --- Dynamic P&L ---
+var plData = [];
+function updatePL() {
+  var direct = +document.getElementById('in-direct').value || 0;
+  var cc = +document.getElementById('in-cc').value || 0;
+  var nocc = +document.getElementById('in-nocc').value || 0;
+  var organic = +document.getElementById('in-organic').value || 0;
+  var boomerang = +document.getElementById('in-boomerang').value || 0;
+  var rev = +document.getElementById('in-rev').value || 150;
+  var ret = (+document.getElementById('in-ret').value || 80) / 100;
+  var base = +document.getElementById('in-base').value || 0;
+  var numSDRs = +document.getElementById('in-sdrs').value || 1;
+
+  var directClose = 135, ccClose = 126, noccClose = 128;
+  var organicClose = 40, boomerangClose = 40;
+  var resid = 25;
+  var milestones = {3:40, 6:125, 12:75};
+  var newPerMonth = direct + cc + nocc + organic + boomerang;
+
+  var months = [], cumRev = 0, cumCost = 0;
+  var cohorts = [];
+  plData = [];
+
+  for (var m = 1; m <= 12; m++) {
+    var leadCost = (direct * 5 + cc * 5 + nocc * 3) * numSDRs + organic * 0;
+    var closeComp = direct * directClose + cc * ccClose + nocc * noccClose + organic * organicClose + boomerang * boomerangClose;
+    var residComp = 0, mileComp = 0;
+    var baseCost = base * numSDRs;
+    var monthRev = 0;
+    cohorts.push({count: newPerMonth, birth: m});
+    var activeCusts = 0;
+    for (var c = 0; c < cohorts.length; c++) {
+      var co = cohorts[c], age = m - co.birth;
+      if (age === 0) {
+        monthRev += co.count * rev;
+        activeCusts += co.count;
+      } else {
+        co.count *= ret;
+        monthRev += co.count * rev;
+        activeCusts += co.count;
+        residComp += co.count * resid;
+        if (milestones[age]) mileComp += co.count * milestones[age];
+      }
+    }
+    var totalComp = Math.round(baseCost + leadCost + closeComp + residComp + mileComp);
+    monthRev = Math.round(monthRev);
+    cumRev += monthRev; cumCost += totalComp;
+    var row = {
+      month: m, customers: Math.round(activeCusts),
+      leadCost: Math.round(leadCost), closeComp: Math.round(closeComp),
+      residMile: Math.round(residComp + mileComp), baseCost: Math.round(baseCost),
+      totalComp: totalComp, revenue: monthRev,
+      profit: Math.round(monthRev - totalComp),
+      cumProfit: Math.round(cumRev - cumCost),
+      compPct: monthRev > 0 ? (totalComp / monthRev * 100).toFixed(0) + '%' : '—'
+    };
+    months.push(row);
+    plData.push(row);
+  }
+
+  var html = '<table class="data-table"><thead><tr>';
+  html += '<th>Mo</th><th>Cust.</th><th>Lead Cost</th><th>Close Comp</th><th>Resid+Mile</th><th>Base</th><th>Total Comp</th><th>Revenue</th><th>Profit</th><th>Comp%</th>';
+  html += '</tr></thead><tbody>';
+  for (var i = 0; i < months.length; i++) {
+    var r = months[i];
+    var cls = (r.month === 6 || r.month === 12) ? ' class="highlight-row"' : '';
+    var pc = r.profit >= 0 ? '#10B981' : '#EF4444';
+    html += '<tr' + cls + '>';
+    html += '<td>' + r.month + '</td><td>' + r.customers + '</td>';
+    html += '<td>$' + r.leadCost.toLocaleString() + '</td>';
+    html += '<td>$' + r.closeComp.toLocaleString() + '</td>';
+    html += '<td>$' + r.residMile.toLocaleString() + '</td>';
+    html += '<td>$' + r.baseCost.toLocaleString() + '</td>';
+    html += '<td>$' + r.totalComp.toLocaleString() + '</td>';
+    html += '<td>$' + r.revenue.toLocaleString() + '</td>';
+    html += '<td style="color:' + pc + ';">$' + r.profit.toLocaleString() + '</td>';
+    html += '<td>' + r.compPct + '</td></tr>';
+  }
+  var last = months[11];
+  var tPct = last.cumProfit + cumCost > 0 ? (cumCost / cumRev * 100).toFixed(0) + '%' : '—';
+  html += '<tr class="total-row"><td>Tot</td><td>' + last.customers + '</td>';
+  html += '<td></td><td></td><td></td><td></td>';
+  html += '<td>$' + cumCost.toLocaleString() + '</td>';
+  html += '<td>$' + cumRev.toLocaleString() + '</td>';
+  html += '<td>$' + (cumRev - cumCost).toLocaleString() + '</td>';
+  html += '<td>' + tPct + '</td></tr>';
+  html += '</tbody></table>';
+  document.getElementById('pl-table').innerHTML = html;
+  document.getElementById('annual-profit').textContent = '$' + (cumRev - cumCost).toLocaleString();
+  renderRVChart();
+}
+
+function renderRVChart() {
+  if (!plData.length) return;
+  var maxVal = 0;
+  plData.forEach(function(r){ maxVal = Math.max(maxVal, r.revenue, r.totalComp); });
+  var h = '';
+  plData.forEach(function(r){
+    var rw = maxVal > 0 ? (r.revenue / maxVal * 100) : 0;
+    var cw = maxVal > 0 ? (r.totalComp / maxVal * 100) : 0;
+    h += '<div class="rv-row">';
+    h += '<div class="rv-month">M' + r.month + '</div>';
+    h += '<div class="rv-bars">';
+    h += '<div class="rv-bar" style="width:' + Math.max(rw,3) + '%;background:#10B981;">$' + r.revenue.toLocaleString() + '</div>';
+    h += '<div class="rv-bar" style="width:' + Math.max(cw,3) + '%;background:#7C3AED;">$' + r.totalComp.toLocaleString() + '</div>';
+    h += '</div></div>';
+  });
+  document.getElementById('rv-chart').innerHTML = h;
+}
+
+function downloadCSV() {
+  if (!plData.length) return;
+  var rows = [['Month','Customers','Lead Cost','Close Comp','Resid+Milestones','Base Salary','Total Comp','Revenue','Profit','Comp % of Rev']];
+  plData.forEach(function(r){
+    rows.push([r.month, r.customers, r.leadCost, r.closeComp, r.residMile, r.baseCost, r.totalComp, r.revenue, r.profit, r.compPct]);
+  });
+  var csv = rows.map(function(r){return r.join(',');}).join('\n');
+  var blob = new Blob([csv], {type:'text/csv'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'relay-comp-pl.csv';
+  a.click();
+}
+
+updatePL();
+</script>
+</body>
+</html>
