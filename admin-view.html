@@ -133,8 +133,17 @@
         <tr><td>Boomerang reactivations/mo</td><td><input class="num-input" type="number" id="in-boomerang" value="1" min="0" max="30" oninput="updatePL()"></td></tr>
         <tr><td>Revenue per customer</td><td><input class="num-input" type="number" id="in-rev" value="150" min="50" max="500" step="10" oninput="updatePL()"></td></tr>
         <tr><td>Monthly retention rate %</td><td><input class="num-input" type="number" id="in-ret" value="80" min="50" max="99" oninput="updatePL()"></td></tr>
-        <tr><td>SDR base salary/mo</td><td><input class="num-input" type="number" id="in-base" value="275" min="0" max="1000" step="25" oninput="updatePL()"></td></tr>
         <tr><td>Number of SDRs</td><td><input class="num-input" type="number" id="in-sdrs" value="2" min="1" max="10" oninput="updatePL()"></td></tr>
+      </table>
+      <div style="margin-top:18px;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#A89BC2;font-weight:700;text-align:center;">Conversion Rates</div>
+      <table class="inputs-table" style="margin-top:8px;">
+        <tr><td>Direct sale close rate %</td><td><input class="num-input" type="number" id="in-cr-direct" value="33" min="1" max="100" oninput="updatePL()"></td></tr>
+        <tr><td>CC trial auto-conversion %</td><td><input class="num-input" type="number" id="in-cr-cc" value="50" min="1" max="100" oninput="updatePL()"></td></tr>
+        <tr><td>No-CC trial self-conversion %</td><td><input class="num-input" type="number" id="in-cr-nocc-self" value="8" min="1" max="100" oninput="updatePL()"></td></tr>
+        <tr><td>No-CC trial conversion (with AE) %</td><td><input class="num-input" type="number" id="in-cr-nocc-ae" value="25" min="1" max="100" oninput="updatePL()"></td></tr>
+        <tr><td>% of CC trials wanting AE call</td><td><input class="num-input" type="number" id="in-pct-cc-ae" value="20" min="0" max="100" oninput="updatePL()"></td></tr>
+        <tr><td>% of no-CC trials getting AE call</td><td><input class="num-input" type="number" id="in-pct-nocc-ae" value="30" min="0" max="100" oninput="updatePL()"></td></tr>
+        <tr><td>Boomerang conversion rate %</td><td><input class="num-input" type="number" id="in-cr-boomerang" value="50" min="1" max="100" oninput="updatePL()"></td></tr>
       </table>
     </div>
 
@@ -163,8 +172,8 @@
     <h2 class="section-header">Bottom line for Nic</h2>
     <ul style="list-style:none;max-width:700px;margin:0 auto;">
       <li style="padding:12px 0;border-bottom:1px solid rgba(45,31,78,0.4);color:#A89BC2;display:flex;gap:10px;"><span style="color:#10B981;font-size:1.1rem;flex-shrink:0;">&#10003;</span><span><strong style="color:#FFF;">We save $50 per customer acquired</strong> by cutting waste on bad leads.</span></li>
-      <li style="padding:12px 0;border-bottom:1px solid rgba(45,31,78,0.4);color:#A89BC2;display:flex;gap:10px;"><span style="color:#10B981;font-size:1.1rem;flex-shrink:0;">&#10003;</span><span><strong style="color:#FFF;">Every dollar of ongoing comp is self-funded</strong> by customer payments. Residuals are 17% of revenue.</span></li>
-      <li style="padding:12px 0;border-bottom:1px solid rgba(45,31,78,0.4);color:#A89BC2;display:flex;gap:10px;"><span style="color:#10B981;font-size:1.1rem;flex-shrink:0;">&#10003;</span><span><strong style="color:#FFF;">Break-even: month 1. Always.</strong> First payment covers close cost.</span></li>
+      <li style="padding:12px 0;border-bottom:1px solid rgba(45,31,78,0.4);color:#A89BC2;display:flex;gap:10px;"><span style="color:#10B981;font-size:1.1rem;flex-shrink:0;">&#10003;</span><span><strong style="color:#FFF;">Ongoing comp is designed to be self-funding</strong> &mdash; residuals run ~17% of revenue from retained customers.</span></li>
+      <li style="padding:12px 0;border-bottom:1px solid rgba(45,31,78,0.4);color:#A89BC2;display:flex;gap:10px;"><span style="color:#10B981;font-size:1.1rem;flex-shrink:0;">&#10003;</span><span><strong style="color:#FFF;">At current AOV ($150/mo), break-even is typically month 1.</strong> The first payment typically covers close cost.</span></li>
       <li style="padding:12px 0;border-bottom:1px solid rgba(45,31,78,0.4);color:#A89BC2;display:flex;gap:10px;"><span style="color:#10B981;font-size:1.1rem;flex-shrink:0;">&#10003;</span><span><strong style="color:#FFF;">M6/M12 bonuses align the team with retention</strong> &mdash; our biggest problem.</span></li>
       <li style="padding:12px 0;color:#A89BC2;display:flex;gap:10px;"><span style="color:#10B981;font-size:1.1rem;flex-shrink:0;">&#10003;</span><span><strong style="color:#FFF;">Close bonuses are tiered by conversion rate.</strong> Better conversion = higher pay.</span></li>
     </ul>
@@ -192,38 +201,31 @@
   document.getElementById('churn-chart').innerHTML = h;
 })();
 
-// --- Static chart: Spend Comparison ---
+// --- Static chart: Spend Comparison (simplified) ---
 (function(){
   var cats = [
-    {name:'Lead costs/mo', old:750, m1:100, m6:100},
-    {name:'Close bonuses/mo', old:500, m1:530, m6:530},
-    {name:'Residuals/mo', old:0, m1:0, m6:250},
-    {name:'Milestones (avg/mo)', old:0, m1:0, m6:100},
-    {name:'SDR base salary', old:550, m1:550, m6:550}
+    {name:'Waste (non-converting leads)', old:750, nw:100},
+    {name:'Sales comp (close + residuals + milestones)', old:500, nw:1430}
   ];
-  var tOld=0, tM1=0, tM6=0;
-  cats.forEach(function(c){tOld+=c.old;tM1+=c.m1;tM6+=c.m6;});
-  var max = Math.max(tOld, tM1, tM6, 800);
+  var tOld = 1250, tNew = 1530;
+  var max = Math.max(tOld, tNew, 1600);
   var h = '<div style="font-size:0.75rem;color:#A89BC2;display:flex;gap:16px;margin-bottom:12px;justify-content:center;">';
   h += '<span><span style="display:inline-block;width:10px;height:10px;background:#EF4444;border-radius:2px;margin-right:3px;vertical-align:middle;"></span>Old model</span>';
-  h += '<span><span style="display:inline-block;width:10px;height:10px;background:#F59E0B;border-radius:2px;margin-right:3px;vertical-align:middle;"></span>New (month 1)</span>';
-  h += '<span><span style="display:inline-block;width:10px;height:10px;background:#10B981;border-radius:2px;margin-right:3px;vertical-align:middle;"></span>New (month 6)</span>';
+  h += '<span><span style="display:inline-block;width:10px;height:10px;background:#10B981;border-radius:2px;margin-right:3px;vertical-align:middle;"></span>New model (mature)</span>';
   h += '</div>';
   cats.forEach(function(c){
-    var wO = Math.max(c.old/max*100,2), wM1 = Math.max(c.m1/max*100,2), wM6 = Math.max(c.m6/max*100,2);
+    var wO = Math.max(c.old/max*100,2), wN = Math.max(c.nw/max*100,2);
     h += '<div class="spend-row"><div class="spend-cat">' + c.name + '</div><div class="spend-bars">';
     h += '<div class="spend-bar" style="width:' + wO + '%;background:#EF4444;">$' + c.old + '</div>';
-    h += '<div class="spend-bar" style="width:' + wM1 + '%;background:#F59E0B;">$' + c.m1 + '</div>';
-    h += '<div class="spend-bar" style="width:' + wM6 + '%;background:#10B981;">$' + c.m6 + '</div>';
+    h += '<div class="spend-bar" style="width:' + wN + '%;background:#10B981;">$' + c.nw + '</div>';
     h += '</div></div>';
   });
   h += '<div style="margin-top:12px;border-top:1px solid #2D1F4E;padding-top:12px;">';
   h += '<div class="spend-row"><div class="spend-cat" style="font-weight:700;color:#FFF;">Total</div><div class="spend-bars">';
   h += '<div class="spend-bar" style="width:' + (tOld/max*100) + '%;background:#EF4444;">$' + tOld + '</div>';
-  h += '<div class="spend-bar" style="width:' + (tM1/max*100) + '%;background:#F59E0B;">$' + tM1 + '</div>';
-  h += '<div class="spend-bar" style="width:' + (tM6/max*100) + '%;background:#10B981;">$' + tM6 + '</div>';
+  h += '<div class="spend-bar" style="width:' + (tNew/max*100) + '%;background:#10B981;">$' + tNew + '</div>';
   h += '</div></div></div>';
-  h += '<div style="margin-top:14px;font-size:0.82rem;color:#A89BC2;text-align:center;">Revenue generated: <strong style="color:#10B981;">$2,250/mo (new model)</strong> vs <strong style="color:#EF4444;">$1,650/mo (old model)</strong> &mdash; quality incentives drive more conversions.</div>';
+  h += '<div style="margin-top:14px;font-size:0.82rem;color:#A89BC2;text-align:center;">New model costs $280 more/month in sales comp &mdash; but generates <strong style="color:#10B981;">$600 more in monthly revenue</strong> from better-quality conversions.</div>';
   document.getElementById('spend-chart').innerHTML = h;
 })();
 
@@ -237,24 +239,38 @@ function updatePL() {
   var boomerang = +document.getElementById('in-boomerang').value || 0;
   var rev = +document.getElementById('in-rev').value || 150;
   var ret = (+document.getElementById('in-ret').value || 80) / 100;
-  var base = +document.getElementById('in-base').value || 0;
   var numSDRs = +document.getElementById('in-sdrs').value || 1;
+
+  // Conversion rates from inputs
+  var crDirect = (+document.getElementById('in-cr-direct').value || 33) / 100;
+  var crCC = (+document.getElementById('in-cr-cc').value || 50) / 100;
+  var crNoccSelf = (+document.getElementById('in-cr-nocc-self').value || 8) / 100;
+  var crNoccAE = (+document.getElementById('in-cr-nocc-ae').value || 25) / 100;
+  var pctCCAE = (+document.getElementById('in-pct-cc-ae').value || 20) / 100;
+  var pctNoccAE = (+document.getElementById('in-pct-nocc-ae').value || 30) / 100;
+  var crBoomerang = (+document.getElementById('in-cr-boomerang').value || 50) / 100;
+
+  // Converted customers per month (inputs are leads, rates determine conversions)
+  var convDirect = direct * crDirect;
+  var convCC = cc * crCC + cc * pctCCAE * (1 - crCC) * crNoccAE; // auto-converts + AE closes on remainder
+  var convNocc = nocc * crNoccSelf + nocc * pctNoccAE * crNoccAE; // self-converts + AE closes
+  var convOrganic = organic * 0.5; // organic assumed 50% close
+  var convBoomerang = boomerang * crBoomerang;
 
   var directClose = 135, ccClose = 126, noccClose = 128;
   var organicClose = 40, boomerangClose = 40;
   var resid = 25;
   var milestones = {3:40, 6:125, 12:75};
-  var newPerMonth = direct + cc + nocc + organic + boomerang;
+  var newPerMonth = convDirect + convCC + convNocc + convOrganic + convBoomerang;
 
   var months = [], cumRev = 0, cumCost = 0;
   var cohorts = [];
   plData = [];
 
   for (var m = 1; m <= 12; m++) {
-    var leadCost = (direct * 5 + cc * 5 + nocc * 3) * numSDRs + organic * 0;
-    var closeComp = direct * directClose + cc * ccClose + nocc * noccClose + organic * organicClose + boomerang * boomerangClose;
+    var leadCost = (direct * 5 + cc * 5 + nocc * 3) * numSDRs;
+    var closeComp = convDirect * directClose + convCC * ccClose + convNocc * noccClose + convOrganic * organicClose + convBoomerang * boomerangClose;
     var residComp = 0, mileComp = 0;
-    var baseCost = base * numSDRs;
     var monthRev = 0;
     cohorts.push({count: newPerMonth, birth: m});
     var activeCusts = 0;
@@ -271,13 +287,13 @@ function updatePL() {
         if (milestones[age]) mileComp += co.count * milestones[age];
       }
     }
-    var totalComp = Math.round(baseCost + leadCost + closeComp + residComp + mileComp);
+    var totalComp = Math.round(leadCost + closeComp + residComp + mileComp);
     monthRev = Math.round(monthRev);
     cumRev += monthRev; cumCost += totalComp;
     var row = {
       month: m, customers: Math.round(activeCusts),
       leadCost: Math.round(leadCost), closeComp: Math.round(closeComp),
-      residMile: Math.round(residComp + mileComp), baseCost: Math.round(baseCost),
+      residMile: Math.round(residComp + mileComp),
       totalComp: totalComp, revenue: monthRev,
       profit: Math.round(monthRev - totalComp),
       cumProfit: Math.round(cumRev - cumCost),
@@ -288,7 +304,7 @@ function updatePL() {
   }
 
   var html = '<table class="data-table"><thead><tr>';
-  html += '<th>Mo</th><th>Cust.</th><th>Lead Cost</th><th>Close Comp</th><th>Resid+Mile</th><th>Base</th><th>Total Comp</th><th>Revenue</th><th>Profit</th><th>Comp%</th>';
+  html += '<th>Mo</th><th>Cust.</th><th>What we pay for leads</th><th>What we pay when they sign up</th><th>Ongoing bonuses (retained)</th><th>Total we pay out</th><th>What customers pay us</th><th>What we keep</th><th>% going to comp</th>';
   html += '</tr></thead><tbody>';
   for (var i = 0; i < months.length; i++) {
     var r = months[i];
@@ -299,16 +315,15 @@ function updatePL() {
     html += '<td>$' + r.leadCost.toLocaleString() + '</td>';
     html += '<td>$' + r.closeComp.toLocaleString() + '</td>';
     html += '<td>$' + r.residMile.toLocaleString() + '</td>';
-    html += '<td>$' + r.baseCost.toLocaleString() + '</td>';
     html += '<td>$' + r.totalComp.toLocaleString() + '</td>';
     html += '<td>$' + r.revenue.toLocaleString() + '</td>';
     html += '<td style="color:' + pc + ';">$' + r.profit.toLocaleString() + '</td>';
     html += '<td>' + r.compPct + '</td></tr>';
   }
   var last = months[11];
-  var tPct = last.cumProfit + cumCost > 0 ? (cumCost / cumRev * 100).toFixed(0) + '%' : '—';
+  var tPct = cumRev > 0 ? (cumCost / cumRev * 100).toFixed(0) + '%' : '—';
   html += '<tr class="total-row"><td>Tot</td><td>' + last.customers + '</td>';
-  html += '<td></td><td></td><td></td><td></td>';
+  html += '<td></td><td></td><td></td>';
   html += '<td>$' + cumCost.toLocaleString() + '</td>';
   html += '<td>$' + cumRev.toLocaleString() + '</td>';
   html += '<td>$' + (cumRev - cumCost).toLocaleString() + '</td>';
@@ -339,9 +354,9 @@ function renderRVChart() {
 
 function downloadCSV() {
   if (!plData.length) return;
-  var rows = [['Month','Customers','Lead Cost','Close Comp','Resid+Milestones','Base Salary','Total Comp','Revenue','Profit','Comp % of Rev']];
+  var rows = [['Month','Customers','What we pay for leads','What we pay when they sign up','Ongoing bonuses (retained)','Total we pay out','What customers pay us','What we keep','% going to comp']];
   plData.forEach(function(r){
-    rows.push([r.month, r.customers, r.leadCost, r.closeComp, r.residMile, r.baseCost, r.totalComp, r.revenue, r.profit, r.compPct]);
+    rows.push([r.month, r.customers, r.leadCost, r.closeComp, r.residMile, r.totalComp, r.revenue, r.profit, r.compPct]);
   });
   var csv = rows.map(function(r){return r.join(',');}).join('\n');
   var blob = new Blob([csv], {type:'text/csv'});

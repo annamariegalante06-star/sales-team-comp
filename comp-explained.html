@@ -217,7 +217,7 @@
       <div class="flow-row">
         <!-- DIRECT SALE -->
         <div class="flow-branch">
-          <div class="flow-node n-purple">Direct Sale <a href="#lead-definitions" class="def-link">(what counts? &darr;)</a><strong class="purple">SDR books demo &mdash; $5 SDR</strong></div>
+          <div class="flow-node n-purple">Direct Sale <a href="#lead-direct" class="def-link">(what counts? &darr;)</a><strong class="purple">SDR books demo &mdash; $5 SDR</strong></div>
           <div class="flow-vline"></div>
           <div class="flow-node n-purple">Andy runs demo</div>
           <div class="flow-vline"></div>
@@ -227,7 +227,7 @@
         </div>
         <!-- CC TRIAL -->
         <div class="flow-branch">
-          <div class="flow-node n-green">Signs up with credit card <a href="#lead-definitions" class="def-link">(what counts? &darr;)</a><strong class="green">$5 SDR</strong></div>
+          <div class="flow-node n-green">Signs up with credit card <a href="#lead-cc" class="def-link">(what counts? &darr;)</a><strong class="green">$5 SDR</strong></div>
           <div class="flow-vline"></div>
           <div class="flow-split">
             <div class="flow-split-col">
@@ -244,7 +244,7 @@
         </div>
         <!-- NO-CC TRIAL -->
         <div class="flow-branch">
-          <div class="flow-node n-yellow">Signs up (email only, no card) <a href="#lead-definitions" class="def-link">(what counts? &darr;)</a><strong class="yellow">$3 SDR</strong></div>
+          <div class="flow-node n-yellow">Signs up (email only, no card) <a href="#lead-nocc" class="def-link">(what counts? &darr;)</a><strong class="yellow">$3 SDR</strong></div>
           <div class="flow-vline"></div>
           <div class="flow-split">
             <div class="flow-split-col">
@@ -265,7 +265,7 @@
       <div class="flow-row-2">
         <!-- ORGANIC / SELF-SERVE -->
         <div class="flow-branch">
-          <div class="flow-node n-indigo">Organic / Self-Serve <a href="#lead-definitions" class="def-link">(what counts? &darr;)</a><span class="flow-sub">From email marketing, ads, or word of mouth</span></div>
+          <div class="flow-node n-indigo">Organic / Self-Serve <a href="#lead-organic" class="def-link">(what counts? &darr;)</a><span class="flow-sub">From email marketing, ads, or word of mouth</span></div>
           <div class="flow-vline"></div>
           <div class="flow-node n-indigo">Signs up on own (CC or no-CC trial)<strong class="indigo">Assigned to SDR &mdash; $5</strong></div>
           <div class="flow-vline"></div>
@@ -286,7 +286,7 @@
         </div>
         <!-- BOOMERANG -->
         <div class="flow-branch">
-          <div class="flow-node n-orange">Boomerang <a href="#lead-definitions" class="def-link">(what counts? &darr;)</a><span class="flow-sub">Churned customer comes back</span></div>
+          <div class="flow-node n-orange">Boomerang <a href="#lead-boomerang" class="def-link">(what counts? &darr;)</a><span class="flow-sub">Churned customer comes back</span></div>
           <div class="flow-vline"></div>
           <div class="flow-node n-orange">Reactivates<strong class="orange">$30 SDR &middot; $20 AE</strong></div>
           <div class="flow-vline"></div>
@@ -402,7 +402,7 @@
   <div class="container">
     <h2 class="section-header">What counts as a lead?</h2>
 
-    <div class="card lead-card lc-purple">
+    <div id="lead-direct" class="card lead-card lc-purple">
       <h3 class="purple">Direct Sale Lead</h3>
       <p class="ldesc">You found a business, reached out, and they agreed to a demo.</p>
       <ul>
@@ -416,7 +416,7 @@
       <p class="earn-line">&rarr; You earn: $5 when the demo is booked</p>
     </div>
 
-    <div class="card lead-card lc-green">
+    <div id="lead-cc" class="card lead-card lc-green">
       <h3 class="green">Credit Card Trial Lead</h3>
       <p class="ldesc">Someone starts a 30-day free trial with their credit card.</p>
       <ul>
@@ -429,7 +429,7 @@
       <p class="earn-line">&rarr; You earn: $5 when they sign up. $60 if they become a customer.</p>
     </div>
 
-    <div class="card lead-card lc-yellow">
+    <div id="lead-nocc" class="card lead-card lc-yellow">
       <h3 class="yellow">No Credit Card Trial Lead</h3>
       <p class="ldesc">Someone starts a free trial with just an email. No card.</p>
       <ul>
@@ -441,7 +441,7 @@
       <p class="earn-line">&rarr; You earn: $3 on signup. Up to $60 if they convert.</p>
     </div>
 
-    <div class="card lead-card lc-indigo">
+    <div id="lead-organic" class="card lead-card lc-indigo">
       <h3 class="indigo">Organic / Self-Serve Lead</h3>
       <p class="ldesc">Someone finds Relay through email marketing, ads, or word of mouth and signs up on their own.</p>
       <ul>
@@ -453,7 +453,7 @@
       <p class="earn-line">&rarr; SDR earns: $5 on first contact. $40 on conversion.</p>
     </div>
 
-    <div class="card lead-card lc-orange">
+    <div id="lead-boomerang" class="card lead-card lc-orange">
       <h3 class="orange">Boomerang Lead</h3>
       <p class="ldesc">A churned customer comes back and reactivates their account.</p>
       <ul>
@@ -526,16 +526,11 @@
     <div class="grid-2">
       <div class="card example-card ex-sdr">
         <h3 class="purple">SDR Example</h3>
-        <p class="scenario">You bring 8 leads this month. 3 become paying customers (1 direct, 1 CC trial, 1 no-CC with AE).</p>
-        <div class="line"><span>5 direct leads &times; $5</span><span>$25</span></div>
-        <div class="line"><span>2 CC trial signups &times; $5</span><span>$10</span></div>
-        <div class="line"><span>1 no-CC signup &times; $3</span><span>$3</span></div>
-        <div class="line"><span>1 direct close &times; $80</span><span>$80</span></div>
-        <div class="line"><span>1 CC auto-convert &times; $60</span><span>$60</span></div>
-        <div class="line"><span>1 no-CC w/ AE &times; ($10 + $40)</span><span>$50</span></div>
+        <p class="scenario">You bring 8 leads this month. 3 become paying customers.</p>
+        <div class="line"><span>8 leads &times; $5</span><span>$40</span></div>
+        <div class="line"><span>3 customers &times; $80</span><span>$240</span></div>
         <div class="line"><span>Residuals (5 past customers)</span><span>$50</span></div>
-        <div class="line"><span>Base salary</span><span>$275</span></div>
-        <div class="total-line"><span>Total</span><span>$553</span></div>
+        <div class="total-line"><span>Total</span><span>$330</span></div>
         <p class="note">Next month, those 3 new customers add to your residuals. Your pay keeps growing.</p>
       </div>
       <div class="card example-card ex-ae">
